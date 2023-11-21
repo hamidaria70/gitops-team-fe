@@ -1,0 +1,23 @@
+{{- range .Values.application }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
+  project: default
+  source:
+    repoURL: {{ .source.repoURL }}
+    path: {{ .source.path }}
+    targetRevision: {{ .source.targetRevision }}
+  destination:
+    server: {{ .destination.server }}
+    namespace: {{ .destination.namespace }}
+{{- end }}
